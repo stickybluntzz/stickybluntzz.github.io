@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STICKYBLUNTZZ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+
+    <meta property="og:title" content="STICKYBLUNTZZ ">
+    <meta property="og:description" content="A furry browsing the internet. Check out my fursonas, music interests, and links!">
+    <meta property="og:image" content="PFP.jpg">
+    <meta property="og:url" content="https://stickybluntzz.github.io">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#DC2626"> 
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@stickybluntzz">
+    <meta name="twitter:creator" content="@stickybluntzz">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #E5E7EB;
+            background: linear-gradient(to bottom right, #000000, #3C0000, #000000); 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .pixel-card {
+            border: 4px solid #DC2626;
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+        
+        .accent-text {
+            color: #EF4444;
+        }
+
+        .link-button {
+            background-color: #DC2626;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s ease;
+            font-weight: 700;
+            @apply hover:bg-red-700 active:bg-red-800;
+        }
+        .link-button:hover {
+            background-color: #991B1B;
+            transform: translateY(-2px);
+        }
+
+        #audio-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+            background-color: #DC2626;
+            color: white;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-left: 1rem;
+        }
+        #audio-toggle:hover {
+            background-color: #991B1B;
+        }
+
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1) translateY(0); opacity: 1; }
+            50% { transform: scale(1.1) translateY(-2px); opacity: 0.9; }
+        }
+        .click-me-pulse {
+            animation: subtle-pulse 1.5s ease-in-out infinite;
+        }
+        
+        .image-wrapper {
+            padding-top: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-audio" loop src="bg.mp3"></audio>
+
+    <div class="p-4 md:p-8 w-full max-w-4xl">
+        
+        <div class="pixel-card rounded-2xl p-6 md:p-10 transition duration-300 hover:scale-[1.02]">
+            
+            <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
+                
+                <div class="flex-shrink-0 relative">
+                    <div class="w-36 h-36 rounded-full border-4 border-red-600 flex items-center justify-center shadow-2xl transition duration-500 hover:scale-110 bg-gray-900 overflow-hidden relative">
+                        <img src="PFP.jpg" alt="Profile Picture" class="absolute inset-0 w-full h-full object-cover rounded-full z-0">
+                    </div>
+                    <span class="absolute -top-4 -right-4 text-5xl accent-text transform rotate-[10deg] animate-pulse" title="Bone">🦴</span>
+                </div>
+
+                <div class="flex-grow text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start">
+                        <h2 class="text-4xl font-extrabold accent-text mb-2">Hello! I am Stickybluntzz!</h2>
+                        <button id="audio-toggle" title="Play/Pause Background Music" class="mt-[-0.5rem] click-me-pulse">
+                            <span id="audio-icon" class="text-xl">🔇</span>
+                        </button>
+                    </div>
+                    <p class="text-gray-200 text-lg">A furry browsing the internet. <br> This website was made for people to get to know me and communicate to me!</p>
+                    <p class="text-sm text-gray-400 mt-1 italic">My Discord is <strong class="text-red-300">STICKYBLUNTZZ</strong>.</p>
+                </div>
+            </div>
+            
+            <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                <a href="https://x.com/stickybluntzz" class="link-button hover:shadow-lg">
+                    <span class="text-xl">🐦</span> X/Twitter Profile
+                </a>
+
+                <a href="https://discord.com/users/1367956995893755914" class="link-button hover:shadow-lg">
+                    <span class="text-xl">🔗</span> Discord (Might not work)
+                </a>
+
+                <a href="https://t.me/sillydogmoment" class="link-button hover:shadow-lg">
+                    <span class="text-xl">📱</span> Telegram
+                </a>
+                    
+                <a href="https://discord.gg/rZ6zfgN8ba" class="link-button hover:shadow-lg">
+                    <span class="text-xl">💌</span> FluffyPaws
+                </a>
+            </div>
+            
+            <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
+
+            <h3 class="text-3xl font-extrabold accent-text text-center mb-6">My Fursonas</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                    <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
+                        <img src="Collis.png" alt="Collis Banner" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-2xl font-bold text-red-400">Collis [Dog]</h4>
+                    <p class="text-sm text-gray-400">A red dog based off of my favorite colors <br> Also based off of Clifford The Big Red Dog.</p>
+                </div>
+
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                    <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
+                        <img src="Scout.png" alt="Scout Banner" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-2xl font-bold text-red-400">Scout [Karelian Bear Dog]</h4>
+                    <p class="text-sm text-gray-400">A fursona I made based off of a Karelian Bear Dog. <br> This fursona has rose designs around its body with a blue outline.</p>
+                </div>
+            </div>
+
+            <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
+
+            <h3 class="text-3xl font-extrabold accent-text text-center mb-6">Get To Know Me</h3>
+
+            <div class="space-y-4">
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                    <span class="text-3xl flex-shrink-0">🎧</span>
+                    <div>
+                        <h4 class="text-xl font-bold text-red-400">Music Obsession</h4>
+                        <p class="text-gray-300">I love artists like Nirvana, Kevin Gates, KoRn, Tyler, The Creator, and Slipknot. <br> Other artists I enjoy are J. Cole, Deaftones, Snuffles, Lil Darkie, Kendrick Lamar, and Kid Cudi</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                    <span class="text-3xl flex-shrink-0">💻</span>
+                    <div>
+                        <h4 class="text-xl font-bold text-red-400">Computer Lover</h4>
+                        <p class="text-gray-300">I love to tinker with computer parts and whatnot. I don't know everything about computers but I like learning and chatting about computer stuff.</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                    <span class="text-3xl flex-shrink-0">🎮</span>
+                    <div>
+                        <h4 class="text-xl font-bold text-red-400">Gaming</h4>
+                        <p class="text-gray-300">I like games like BeamNG, VRChat, CSGO, and Skate</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                    <span class="text-3xl flex-shrink-0">❤️</span>
+                    <div>
+                        <h4 class="text-xl font-bold text-red-400">Things I Like</h4>
+                        <p class="text-gray-300">I like basketball, driving, sleeping, exploring foods, and other things!</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                    <span class="text-3xl flex-shrink-0">🐶</span>
+                    <div>
+                        <h4 class="text-xl font-bold text-red-400">Do I have any fursuits?</h4>
+                        <p class="text-gray-300">Not yet! I still have my life to figure out before I get FULLY into furry stuff.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const audio = document.getElementById('background-audio');
+        const toggleButton = document.getElementById('audio-toggle');
+        const icon = document.getElementById('audio-icon');
+
+        audio.volume = 0.2; 
+        let isPlaying = false;
+
+        function updateIcon() {
+            icon.textContent = isPlaying ? '🔊' : '🔇';
+        }
+
+        function toggleAudio() {
+            toggleButton.classList.remove('click-me-pulse');
+            
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    isPlaying = true;
+                }).catch(error => {
+                    console.error("Audio playback failed:", error);
+                });
+            }
+            updateIcon();
+        }
+
+        updateIcon();
+
+        toggleButton.addEventListener('click', toggleAudio);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            audio.play().then(() => {
+                isPlaying = true;
+                updateIcon();
+                toggleButton.classList.remove('click-me-pulse');
+            }).catch(error => {
+                console.warn("Autoplay was blocked. Please click the speaker icon to start music.");
+                isPlaying = false;
+                updateIcon();
+            });
+        });
+    </script>
+</body>
+</html>
