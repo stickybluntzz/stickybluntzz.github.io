@@ -217,9 +217,9 @@
             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
 
             <div id="visitor-counter-section" class="bg-gray-900 border border-red-700 rounded-xl p-6 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
-                <h4 class="text-2xl font-bold text-red-400 mb-2">Visitor Count</h4>
+                <h4 class="text-2xl font-bold text-red-400 mb-2">Site Visits</h4>
                 <p id="visitor-count" class="text-5xl font-extrabold text-white">---</p>
-                <p id="visitor-status" class="text-sm text-gray-400 mt-1">Initializing counter...</p>
+                <p id="visitor-status" class="text-sm text-gray-400 mt-1">Initializing unique visitor counter...</p>
             </div>
 
             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
@@ -257,106 +257,144 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, runTransaction, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, runTransaction, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        setLogLevel('debug');
 
+        let db, auth;
         const countElement = document.getElementById('visitor-count');
         const statusElement = document.getElementById('visitor-status');
-        
-        const globalCounterRef = doc(db, `artifacts/${appId}/public/data/global_stats/visitor_count`);
 
-        function getOrCreateVisitorId() {
-            const storageKey = 'stickybluntzz_visitor_id';
-            let visitorId = localStorage.getItem(storageKey);
-
-            if (!visitorId) {
-                visitorId = crypto.randomUUID();
-                localStorage.setItem(storageKey, visitorId);
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash |= 0; 
             }
-            return visitorId;
+            return Math.abs(hash).toString(36); 
         }
 
-        async function handleAuth() {
-            const visitorId = getOrCreateVisitorId();
-            const shortId = visitorId.substring(0, 8) + '...';
+        async function getPublicIP() {
+            try {
+                const response = await fetchWithRetry('https://api.ipify.org?format=json');
+                const data = await response.json();
+                if (data.ip) {
+                    return data.ip;
+                }
+                throw new Error('IP not found in response.');
+            } catch (error) {
+                console.error("Error fetching public IP:", error);
+                throw new Error('Failed to determine public IP address.');
+            }
+        }
+        
+        async function updateUniqueCounter() {
+            statusElement.textContent = 'Checking unique visitor status...';
             
-            statusElement.textContent = `Authenticating with Firebase... (ID: ${shortId})`;
+            if (sessionStorage.getItem('stickybluntzz_ip_counted')) {
+                statusElement.textContent = `Visitor counted this session. Reload to update total.`;
+                const currentCountRef = doc(db, 'artifacts', appId, 'public', 'data', 'global_stats', 'total_visits');
+                try {
+                    const currentCountDoc = await getDoc(currentCountRef);
+                    countElement.textContent = (currentCountDoc.exists() ? currentCountDoc.data().count : 0).toLocaleString();
+                } catch (e) {
+                     countElement.textContent = '---';
+                }
+                return;
+            }
+
+            let ipHash;
+            try {
+                const ip = await getPublicIP();
+                ipHash = simpleHash(ip);
+            } catch (e) {
+                statusElement.textContent = `Error: Cannot get IP for unique count.`;
+                return;
+            }
+
+            const today = new Date().toISOString().slice(0, 10);
+            const uniqueVisitId = `${ipHash}_${today}`;
+            
+            const visitLogRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_unique_visits', uniqueVisitId);
+            const totalCountRef = doc(db, 'artifacts', appId, 'public', 'data', 'global_stats', 'total_visits');
 
             try {
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                statusElement.textContent = 'Authenticated. Tracking unique visit...';
+                const newCount = await runTransaction(db, async (transaction) => {
+                    
+                    const logDoc = await transaction.get(visitLogRef);
+                    if (logDoc.exists()) {
+                        return logDoc.data().current_total; 
+                    }
+
+                    const totalDoc = await transaction.get(totalCountRef);
+                    let currentTotal = 0;
+                    if (totalDoc.exists()) {
+                        currentTotal = totalDoc.data().count || 0;
+                    }
+                    const nextTotal = currentTotal + 1;
+
+                    transaction.set(visitLogRef, { 
+                        countedAt: new Date().toISOString(),
+                        current_total: nextTotal
+                    });
+                    transaction.set(totalCountRef, { count: nextTotal });
+                    
+                    return nextTotal;
+                });
+
+                sessionStorage.setItem('stickybluntzz_ip_counted', 'true');
+                countElement.textContent = newCount.toLocaleString();
+                statusElement.textContent = `Hey visitor!`;
                 
-                trackUniqueVisit(visitorId);
             } catch (error) {
-                console.error("Firebase Auth Error:", error);
-                statusElement.textContent = `Error: Could not authenticate.`;
+                console.error("Firestore Unique Counter Transaction Error:", error);
+                statusElement.textContent = `Network Error: Could not verify unique visit.`;
                 countElement.textContent = '---';
             }
         }
 
-        async function trackUniqueVisit(visitorId) {
-            const userVisitRef = doc(db, `artifacts/${appId}/public/data/unique_visits/${visitorId}`);
-
+        async function initializeAppAndAuth() {
+            statusElement.textContent = 'Connecting to network counter...';
             try {
-                await runTransaction(db, async (transaction) => {
-                    const globalCountDoc = await transaction.get(globalCounterRef);
-                    let currentCount = globalCountDoc.exists() && typeof globalCountDoc.data().count === 'number' 
-                                       ? globalCountDoc.data().count : 0;
+                const firebaseApp = initializeApp(firebaseConfig);
+                db = getFirestore(firebaseApp);
+                auth = getAuth(firebaseApp);
+                
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await setPersistence(auth, browserSessionPersistence);
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await setPersistence(auth, browserSessionPersistence);
+                    await signInAnonymously(auth);
+                }
+                
+                await updateUniqueCounter();
 
-                    const userVisitDoc = await transaction.get(userVisitRef);
-                    
-                    const isFirstVisitEver = !userVisitDoc.exists; 
-                    const currentTimeString = new Date().toISOString();
-                    const shortId = visitorId.substring(0, 8) + '...';
-
-                    if (isFirstVisitEver) {
-                        currentCount += 1;
-                        
-                        transaction.set(globalCounterRef, { 
-                            count: currentCount, 
-                            last_update: currentTimeString 
-                        }, { merge: true });
-
-                        transaction.set(userVisitRef, { 
-                            first_visit: currentTimeString,
-                            last_visit: currentTimeString,
-                            id_used: visitorId
-                        });
-                        
-                        statusElement.textContent = `Welcome!`;
-
-                    } else {
-                        transaction.set(userVisitRef, { 
-                            last_visit: currentTimeString,
-                        }, { merge: true });
-
-                        statusElement.textContent = `Welcome back!`;
-                    }
-
-                    countElement.textContent = currentCount.toLocaleString();
-                });
             } catch (error) {
-                console.error("Firestore Transaction Failed (Lifetime Tracker):", error);
-                statusElement.textContent = `Count display error.`;
-                countElement.textContent = '---'; 
+                console.error("Firebase Initialization Error:", error);
+                statusElement.textContent = `Critical Error: Firebase failed to initialize.`;
+                countElement.textContent = '---';
             }
         }
+        
+        initializeAppAndAuth(); 
 
-        handleAuth();
-
+        async function fetchWithRetry(url, options = {}, retries = 3) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response;
+                } catch (error) {
+                    if (i === retries - 1) throw error; 
+                    const delay = Math.pow(2, i) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
 
         const audio = document.getElementById('background-audio');
         const toggleButton = document.getElementById('audio-toggle');
@@ -400,20 +438,6 @@
                 updateIcon();
             });
         });
-
-        async function fetchWithRetry(url, options = {}, retries = 3) {
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    return response;
-                } catch (error) {
-                    if (i === retries - 1) throw error; 
-                    const delay = Math.pow(2, i) * 1000;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                }
-            }
-        }
 
         async function generatePet(type) {
             const container = document.getElementById(`${type}-image-container`);
