@@ -22,7 +22,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: #E5E7EB;
-            background: linear-gradient(to bottom right, #000000, #4d0000, #000000); 
+            background: linear-gradient(to bottom right, #000000, #3C0000, #000000); 
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -46,9 +46,9 @@
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            transition: background-color 0.3s ease;
             font-weight: 700;
-            @apply hover:bg-red-700 active:bg-red-800 flex items-center justify-center space-x-2;
+            @apply hover:bg-red-700 active:bg-red-800;
         }
         .link-button:hover {
             background-color: #991B1B;
@@ -82,6 +82,7 @@
         }
         
         .image-wrapper {
+            /* Aspect Ratio box for responsiveness */
             position: relative;
             padding-top: 100%; 
             overflow: hidden;
@@ -129,20 +130,24 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
+                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://x.com/stickybluntzz" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">🐦</span> <span>X/Twitter Profile</span>
+                    <span class="text-xl">🐦</span> X/Twitter Profile
                 </a>
 
+                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://discord.com/users/1367956995893755914" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">🔗</span> <span>Discord (Might not work)</span>
+                    <span class="text-xl">🔗</span> Discord (Might not work)
                 </a>
 
+                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://t.me/sillydogmoment" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">📱</span> <span>Telegram</span>
+                    <span class="text-xl">📱</span> Telegram
                 </a>
                     
+                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://discord.gg/rZ6zfgN8ba" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">💌</span> <span>FluffyPaws</span>
+                    <span class="text-xl">💌</span> FluffyPaws
                 </a>
             </div>
             
@@ -214,20 +219,14 @@
                 </div>
             </div>
 
-            <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
-
-            <div id="visitor-counter-section" class="bg-gray-900 border border-red-700 rounded-xl p-6 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
-                <h4 class="text-2xl font-bold text-red-400 mb-2">Site Visits</h4>
-                <p id="visitor-count" class="text-5xl font-extrabold text-white">---</p>
-                <p id="visitor-status" class="text-sm text-gray-400 mt-1">Initializing unique visitor counter...</p>
-            </div>
-
+            <!-- START: Random Pet Generator Section -->
             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
 
             <h3 class="text-3xl font-extrabold accent-text text-center mb-6">Random Dog/Cat Generator</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
+                <!-- Dog Generator -->
                 <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
                     <h4 class="text-2xl font-bold text-red-400 mb-3">Fetch a Dog</h4>
                     <div id="dog-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
@@ -239,6 +238,7 @@
                     <p id="dog-error-msg" class="text-sm text-red-500 mt-2 hidden">Failed to fetch dog. Try again!</p>
                 </div>
 
+                <!-- Cat Generator -->
                 <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
                     <h4 class="text-2xl font-bold text-red-400 mb-3">Summon a Cat</h4>
                     <div id="cat-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
@@ -250,152 +250,14 @@
                     <p id="cat-error-msg" class="text-sm text-red-500 mt-2 hidden">Failed to fetch cat. Try again!</p>
                 </div>
             </div>
+            <!-- END: Random Pet Generator Section -->
 
         </div>
 
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, runTransaction, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-
-        let db, auth;
-        const countElement = document.getElementById('visitor-count');
-        const statusElement = document.getElementById('visitor-status');
-
-        function simpleHash(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash |= 0; 
-            }
-            return Math.abs(hash).toString(36); 
-        }
-
-        async function getPublicIP() {
-            try {
-                const response = await fetchWithRetry('https://api.ipify.org?format=json');
-                const data = await response.json();
-                if (data.ip) {
-                    return data.ip;
-                }
-                throw new Error('IP not found in response.');
-            } catch (error) {
-                console.error("Error fetching public IP:", error);
-                throw new Error('Failed to determine public IP address.');
-            }
-        }
-        
-        async function updateUniqueCounter() {
-            statusElement.textContent = 'Checking unique visitor status...';
-            
-            if (sessionStorage.getItem('stickybluntzz_ip_counted')) {
-                statusElement.textContent = `Visitor counted this session. Reload to update total.`;
-                const currentCountRef = doc(db, 'artifacts', appId, 'public', 'data', 'global_stats', 'total_visits');
-                try {
-                    const currentCountDoc = await getDoc(currentCountRef);
-                    countElement.textContent = (currentCountDoc.exists() ? currentCountDoc.data().count : 0).toLocaleString();
-                } catch (e) {
-                     countElement.textContent = '---';
-                }
-                return;
-            }
-
-            let ipHash;
-            try {
-                const ip = await getPublicIP();
-                ipHash = simpleHash(ip);
-            } catch (e) {
-                statusElement.textContent = `Error: Cannot get IP for unique count.`;
-                return;
-            }
-
-            const today = new Date().toISOString().slice(0, 10);
-            const uniqueVisitId = `${ipHash}_${today}`;
-            
-            const visitLogRef = doc(db, 'artifacts', appId, 'public', 'data', 'daily_unique_visits', uniqueVisitId);
-            const totalCountRef = doc(db, 'artifacts', appId, 'public', 'data', 'global_stats', 'total_visits');
-
-            try {
-                const newCount = await runTransaction(db, async (transaction) => {
-                    
-                    const logDoc = await transaction.get(visitLogRef);
-                    if (logDoc.exists()) {
-                        return logDoc.data().current_total; 
-                    }
-
-                    const totalDoc = await transaction.get(totalCountRef);
-                    let currentTotal = 0;
-                    if (totalDoc.exists()) {
-                        currentTotal = totalDoc.data().count || 0;
-                    }
-                    const nextTotal = currentTotal + 1;
-
-                    transaction.set(visitLogRef, { 
-                        countedAt: new Date().toISOString(),
-                        current_total: nextTotal
-                    });
-                    transaction.set(totalCountRef, { count: nextTotal });
-                    
-                    return nextTotal;
-                });
-
-                sessionStorage.setItem('stickybluntzz_ip_counted', 'true');
-                countElement.textContent = newCount.toLocaleString();
-                statusElement.textContent = `Hey visitor!`;
-                
-            } catch (error) {
-                console.error("Firestore Unique Counter Transaction Error:", error);
-                statusElement.textContent = `Network Error: Could not verify unique visit.`;
-                countElement.textContent = '---';
-            }
-        }
-
-        async function initializeAppAndAuth() {
-            statusElement.textContent = 'Connecting to network counter...';
-            try {
-                const firebaseApp = initializeApp(firebaseConfig);
-                db = getFirestore(firebaseApp);
-                auth = getAuth(firebaseApp);
-                
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await setPersistence(auth, browserSessionPersistence);
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await setPersistence(auth, browserSessionPersistence);
-                    await signInAnonymously(auth);
-                }
-                
-                await updateUniqueCounter();
-
-            } catch (error) {
-                console.error("Firebase Initialization Error:", error);
-                statusElement.textContent = `Critical Error: Firebase failed to initialize.`;
-                countElement.textContent = '---';
-            }
-        }
-        
-        initializeAppAndAuth(); 
-
-        async function fetchWithRetry(url, options = {}, retries = 3) {
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    return response;
-                } catch (error) {
-                    if (i === retries - 1) throw error; 
-                    const delay = Math.pow(2, i) * 1000;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                }
-            }
-        }
-
+    <script>
+        // --- Existing Audio Script ---
         const audio = document.getElementById('background-audio');
         const toggleButton = document.getElementById('audio-toggle');
         const icon = document.getElementById('audio-icon');
@@ -439,6 +301,24 @@
             });
         });
 
+        // --- New Pet Generator Script ---
+        
+        // Exponential backoff utility for API calls
+        async function fetchWithRetry(url, options = {}, retries = 3) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response;
+                } catch (error) {
+                    if (i === retries - 1) throw error; 
+                    const delay = Math.pow(2, i) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        // Function to generate and display a pet image
         async function generatePet(type) {
             const container = document.getElementById(`${type}-image-container`);
             const button = document.getElementById(`generate-${type}-btn`);
@@ -451,8 +331,10 @@
             
             let apiUrl = '';
             if (type === 'dog') {
+                // Using Dog API (https://dog.ceo/dog-api/documentation/)
                 apiUrl = 'https://dog.ceo/api/breeds/image/random';
             } else if (type === 'cat') {
+                // Using Cat API (https://thecatapi.com/docs.html) - Public images endpoint
                 apiUrl = 'https://api.thecatapi.com/v1/images/search?limit=1';
             }
 
@@ -462,13 +344,16 @@
                 
                 let imageUrl = '';
                 if (type === 'dog') {
+                    // Dog API returns: { "message": "...", "status": "success" }
                     if (data.status !== 'success') throw new Error('Dog API did not return success.');
                     imageUrl = data.message;
                 } else if (type === 'cat') {
+                    // Cat API returns: [{ "url": "..." }]
                     if (!data[0] || !data[0].url) throw new Error('Cat API did not return a valid URL.');
                     imageUrl = data[0].url;
                 }
                 
+                // Create image element and load it
                 const img = document.createElement('img');
                 img.src = imageUrl;
                 img.className = 'w-full h-full object-cover rounded-lg transition-opacity duration-300 opacity-0';
@@ -476,6 +361,7 @@
                 img.onload = () => {
                     container.innerHTML = '';
                     container.appendChild(img);
+                    // Fade in the image once loaded
                     setTimeout(() => img.classList.remove('opacity-0'), 10); 
                     button.disabled = false;
                     button.textContent = `New Random ${type.charAt(0).toUpperCase() + type.slice(1)}`;
@@ -494,6 +380,7 @@
             }
         }
 
+        // Attach event listeners to buttons
         document.getElementById('generate-dog-btn').addEventListener('click', () => generatePet('dog'));
         document.getElementById('generate-cat-btn').addEventListener('click', () => generatePet('cat'));
 
