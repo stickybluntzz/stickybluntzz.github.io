@@ -82,8 +82,19 @@
         }
         
         .image-wrapper {
-            padding-top: 100%;
+            /* Aspect Ratio box for responsiveness */
+            position: relative;
+            padding-top: 100%; 
             overflow: hidden;
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -98,7 +109,7 @@
                 
                 <div class="flex-shrink-0 relative">
                     <div class="w-36 h-36 rounded-full border-4 border-red-600 flex items-center justify-center shadow-2xl transition duration-500 hover:scale-110 bg-gray-900 overflow-hidden relative">
-                        <img src="PFP.jpg" alt="Profile Picture" class="absolute inset-0 w-full h-full object-cover rounded-full z-0">
+                        <img src="PFP.jpg" alt="Profile Picture" class="absolute inset-0 w-full h-full object-cover rounded-full z-0" onerror="this.onerror=null;this.src='https://placehold.co/144x144/1f2937/ffffff?text=PFP'">
                     </div>
                     <span class="absolute -top-4 -right-4 text-5xl accent-text transform rotate-[10deg] animate-pulse" title="Bone">🦴</span>
                 </div>
@@ -143,7 +154,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
                     <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
-                        <img src="Collis.png" alt="Collis Banner" class="absolute inset-0 w-full h-full object-cover">
+                        <img src="Collis.png" alt="Collis Banner" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x400/1f2937/ffffff?text=Collis'">
                     </div>
                     <h4 class="text-2xl font-bold text-red-400">Collis [Dog]</h4>
                     <p class="text-sm text-gray-400">A red dog based off of my favorite colors <br> Also based off of Clifford The Big Red Dog.</p>
@@ -151,7 +162,7 @@
 
                 <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
                     <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
-                        <img src="Scout.png" alt="Scout Banner" class="absolute inset-0 w-full h-full object-cover">
+                        <img src="Scout.png" alt="Scout Banner" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x400/1f2937/ffffff?text=Scout'">
                     </div>
                     <h4 class="text-2xl font-bold text-red-400">Scout [Karelian Bear Dog]</h4>
                     <p class="text-sm text-gray-400">A fursona I made based off of a Karelian Bear Dog. <br> This fursona has rose designs around its body with a blue outline.</p>
@@ -204,11 +215,45 @@
                 </div>
             </div>
 
+            <!-- START: Random Pet Generator Section -->
+            <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
+
+            <h3 class="text-3xl font-extrabold accent-text text-center mb-6">Random Dog/Cat Generator</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Dog Generator -->
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
+                    <h4 class="text-2xl font-bold text-red-400 mb-3">Fetch a Dog</h4>
+                    <div id="dog-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
+                        <p class="text-gray-500">Click below!</p>
+                    </div>
+                    <button id="generate-dog-btn" class="link-button w-full">
+                        New Random Dog
+                    </button>
+                    <p id="dog-error-msg" class="text-sm text-red-500 mt-2 hidden">Failed to fetch dog. Try again!</p>
+                </div>
+
+                <!-- Cat Generator -->
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
+                    <h4 class="text-2xl font-bold text-red-400 mb-3">Summon a Cat</h4>
+                    <div id="cat-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
+                        <p class="text-gray-500">Click below!</p>
+                    </div>
+                    <button id="generate-cat-btn" class="link-button w-full">
+                        New Random Cat
+                    </button>
+                    <p id="cat-error-msg" class="text-sm text-red-500 mt-2 hidden">Failed to fetch cat. Try again!</p>
+                </div>
+            </div>
+            <!-- END: Random Pet Generator Section -->
+
         </div>
 
     </div>
 
     <script>
+        // --- Existing Audio Script ---
         const audio = document.getElementById('background-audio');
         const toggleButton = document.getElementById('audio-toggle');
         const icon = document.getElementById('audio-icon');
@@ -251,8 +296,90 @@
                 updateIcon();
             });
         });
+
+        // --- New Pet Generator Script ---
+        
+        // Exponential backoff utility for API calls
+        async function fetchWithRetry(url, options = {}, retries = 3) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response;
+                } catch (error) {
+                    if (i === retries - 1) throw error; 
+                    const delay = Math.pow(2, i) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        // Function to generate and display a pet image
+        async function generatePet(type) {
+            const container = document.getElementById(`${type}-image-container`);
+            const button = document.getElementById(`generate-${type}-btn`);
+            const errorMsg = document.getElementById(`${type}-error-msg`);
+            
+            errorMsg.classList.add('hidden');
+            button.disabled = true;
+            button.textContent = `Fetching ${type}...`;
+            container.innerHTML = `<span class="text-red-500 animate-pulse">Loading...</span>`;
+            
+            let apiUrl = '';
+            if (type === 'dog') {
+                // Using Dog API (https://dog.ceo/dog-api/documentation/)
+                apiUrl = 'https://dog.ceo/api/breeds/image/random';
+            } else if (type === 'cat') {
+                // Using Cat API (https://thecatapi.com/docs.html) - Public images endpoint
+                apiUrl = 'https://api.thecatapi.com/v1/images/search?limit=1';
+            }
+
+            try {
+                const response = await fetchWithRetry(apiUrl);
+                const data = await response.json();
+                
+                let imageUrl = '';
+                if (type === 'dog') {
+                    // Dog API returns: { "message": "...", "status": "success" }
+                    if (data.status !== 'success') throw new Error('Dog API did not return success.');
+                    imageUrl = data.message;
+                } else if (type === 'cat') {
+                    // Cat API returns: [{ "url": "..." }]
+                    if (!data[0] || !data[0].url) throw new Error('Cat API did not return a valid URL.');
+                    imageUrl = data[0].url;
+                }
+                
+                // Create image element and load it
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.className = 'w-full h-full object-cover rounded-lg transition-opacity duration-300 opacity-0';
+                
+                img.onload = () => {
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                    // Fade in the image once loaded
+                    setTimeout(() => img.classList.remove('opacity-0'), 10); 
+                    button.disabled = false;
+                    button.textContent = `New Random ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                };
+
+                img.onerror = () => {
+                    throw new Error(`Failed to load image from URL: ${imageUrl}`);
+                };
+
+            } catch (error) {
+                console.error(`Error generating ${type}:`, error);
+                container.innerHTML = `<span class="text-red-500">Image Failed 😔</span>`;
+                errorMsg.classList.remove('hidden');
+                button.disabled = false;
+                button.textContent = `New Random ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+            }
+        }
+
+        // Attach event listeners to buttons
+        document.getElementById('generate-dog-btn').addEventListener('click', () => generatePet('dog'));
+        document.getElementById('generate-cat-btn').addEventListener('click', () => generatePet('cat'));
+
     </script>
 </body>
-
 </html>
-
