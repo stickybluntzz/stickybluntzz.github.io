@@ -22,7 +22,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: #E5E7EB;
-            background: linear-gradient(to bottom right, #000000, #3C0000, #000000); 
+            background: linear-gradient(to bottom right, #000000, #4d0000, #000000); 
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -46,9 +46,9 @@
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
             font-weight: 700;
-            @apply hover:bg-red-700 active:bg-red-800;
+            @apply hover:bg-red-700 active:bg-red-800 flex items-center justify-center space-x-2;
         }
         .link-button:hover {
             background-color: #991B1B;
@@ -82,7 +82,6 @@
         }
         
         .image-wrapper {
-            /* Aspect Ratio box for responsiveness */
             position: relative;
             padding-top: 100%; 
             overflow: hidden;
@@ -130,24 +129,20 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://x.com/stickybluntzz" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">🐦</span> X/Twitter Profile
+                    <span class="text-xl">🐦</span> <span>X/Twitter Profile</span>
                 </a>
 
-                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://discord.com/users/1367956995893755914" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">🔗</span> Discord (Might not work)
+                    <span class="text-xl">🔗</span> <span>Discord (Might not work)</span>
                 </a>
 
-                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://t.me/sillydogmoment" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">📱</span> Telegram
+                    <span class="text-xl">📱</span> <span>Telegram</span>
                 </a>
                     
-                <!-- Added target="_blank" to open in a new window -->
                 <a href="https://discord.gg/rZ6zfgN8ba" target="_blank" class="link-button hover:shadow-lg">
-                    <span class="text-xl">💌</span> FluffyPaws
+                    <span class="text-xl">💌</span> <span>FluffyPaws</span>
                 </a>
             </div>
             
@@ -219,14 +214,20 @@
                 </div>
             </div>
 
-            <!-- START: Random Pet Generator Section -->
+            <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
+
+            <div id="visitor-counter-section" class="bg-gray-900 border border-red-700 rounded-xl p-6 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                <h4 class="text-2xl font-bold text-red-400 mb-2">Visitor Count</h4>
+                <p id="visitor-count" class="text-5xl font-extrabold text-white">---</p>
+                <p id="visitor-status" class="text-sm text-gray-400 mt-1">Initializing counter...</p>
+            </div>
+
             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
 
             <h3 class="text-3xl font-extrabold accent-text text-center mb-6">Random Dog/Cat Generator</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-                <!-- Dog Generator -->
                 <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
                     <h4 class="text-2xl font-bold text-red-400 mb-3">Fetch a Dog</h4>
                     <div id="dog-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
@@ -238,7 +239,6 @@
                     <p id="dog-error-msg" class="text-sm text-red-500 mt-2 hidden">Failed to fetch dog. Try again!</p>
                 </div>
 
-                <!-- Cat Generator -->
                 <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
                     <h4 class="text-2xl font-bold text-red-400 mb-3">Summon a Cat</h4>
                     <div id="cat-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
@@ -250,14 +250,114 @@
                     <p id="cat-error-msg" class="text-sm text-red-500 mt-2 hidden">Failed to fetch cat. Try again!</p>
                 </div>
             </div>
-            <!-- END: Random Pet Generator Section -->
 
         </div>
 
     </div>
 
-    <script>
-        // --- Existing Audio Script ---
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, runTransaction, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        setLogLevel('debug');
+
+        const countElement = document.getElementById('visitor-count');
+        const statusElement = document.getElementById('visitor-status');
+        
+        const globalCounterRef = doc(db, `artifacts/${appId}/public/data/global_stats/visitor_count`);
+
+        function getOrCreateVisitorId() {
+            const storageKey = 'stickybluntzz_visitor_id';
+            let visitorId = localStorage.getItem(storageKey);
+
+            if (!visitorId) {
+                visitorId = crypto.randomUUID();
+                localStorage.setItem(storageKey, visitorId);
+            }
+            return visitorId;
+        }
+
+        async function handleAuth() {
+            const visitorId = getOrCreateVisitorId();
+            const shortId = visitorId.substring(0, 8) + '...';
+            
+            statusElement.textContent = `Authenticating with Firebase... (ID: ${shortId})`;
+
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                statusElement.textContent = 'Authenticated. Tracking unique visit...';
+                
+                trackUniqueVisit(visitorId);
+            } catch (error) {
+                console.error("Firebase Auth Error:", error);
+                statusElement.textContent = `Error: Could not authenticate.`;
+                countElement.textContent = '---';
+            }
+        }
+
+        async function trackUniqueVisit(visitorId) {
+            const userVisitRef = doc(db, `artifacts/${appId}/public/data/unique_visits/${visitorId}`);
+
+            try {
+                await runTransaction(db, async (transaction) => {
+                    const globalCountDoc = await transaction.get(globalCounterRef);
+                    let currentCount = globalCountDoc.exists() && typeof globalCountDoc.data().count === 'number' 
+                                       ? globalCountDoc.data().count : 0;
+
+                    const userVisitDoc = await transaction.get(userVisitRef);
+                    
+                    const isFirstVisitEver = !userVisitDoc.exists; 
+                    const currentTimeString = new Date().toISOString();
+                    const shortId = visitorId.substring(0, 8) + '...';
+
+                    if (isFirstVisitEver) {
+                        currentCount += 1;
+                        
+                        transaction.set(globalCounterRef, { 
+                            count: currentCount, 
+                            last_update: currentTimeString 
+                        }, { merge: true });
+
+                        transaction.set(userVisitRef, { 
+                            first_visit: currentTimeString,
+                            last_visit: currentTimeString,
+                            id_used: visitorId
+                        });
+                        
+                        statusElement.textContent = `Welcome!`;
+
+                    } else {
+                        transaction.set(userVisitRef, { 
+                            last_visit: currentTimeString,
+                        }, { merge: true });
+
+                        statusElement.textContent = `Welcome back!`;
+                    }
+
+                    countElement.textContent = currentCount.toLocaleString();
+                });
+            } catch (error) {
+                console.error("Firestore Transaction Failed (Lifetime Tracker):", error);
+                statusElement.textContent = `Count display error.`;
+                countElement.textContent = '---'; 
+            }
+        }
+
+        handleAuth();
+
+
         const audio = document.getElementById('background-audio');
         const toggleButton = document.getElementById('audio-toggle');
         const icon = document.getElementById('audio-icon');
@@ -301,9 +401,6 @@
             });
         });
 
-        // --- New Pet Generator Script ---
-        
-        // Exponential backoff utility for API calls
         async function fetchWithRetry(url, options = {}, retries = 3) {
             for (let i = 0; i < retries; i++) {
                 try {
@@ -318,7 +415,6 @@
             }
         }
 
-        // Function to generate and display a pet image
         async function generatePet(type) {
             const container = document.getElementById(`${type}-image-container`);
             const button = document.getElementById(`generate-${type}-btn`);
@@ -331,10 +427,8 @@
             
             let apiUrl = '';
             if (type === 'dog') {
-                // Using Dog API (https://dog.ceo/dog-api/documentation/)
                 apiUrl = 'https://dog.ceo/api/breeds/image/random';
             } else if (type === 'cat') {
-                // Using Cat API (https://thecatapi.com/docs.html) - Public images endpoint
                 apiUrl = 'https://api.thecatapi.com/v1/images/search?limit=1';
             }
 
@@ -344,16 +438,13 @@
                 
                 let imageUrl = '';
                 if (type === 'dog') {
-                    // Dog API returns: { "message": "...", "status": "success" }
                     if (data.status !== 'success') throw new Error('Dog API did not return success.');
                     imageUrl = data.message;
                 } else if (type === 'cat') {
-                    // Cat API returns: [{ "url": "..." }]
                     if (!data[0] || !data[0].url) throw new Error('Cat API did not return a valid URL.');
                     imageUrl = data[0].url;
                 }
                 
-                // Create image element and load it
                 const img = document.createElement('img');
                 img.src = imageUrl;
                 img.className = 'w-full h-full object-cover rounded-lg transition-opacity duration-300 opacity-0';
@@ -361,7 +452,6 @@
                 img.onload = () => {
                     container.innerHTML = '';
                     container.appendChild(img);
-                    // Fade in the image once loaded
                     setTimeout(() => img.classList.remove('opacity-0'), 10); 
                     button.disabled = false;
                     button.textContent = `New Random ${type.charAt(0).toUpperCase() + type.slice(1)}`;
@@ -380,7 +470,6 @@
             }
         }
 
-        // Attach event listeners to buttons
         document.getElementById('generate-dog-btn').addEventListener('click', () => generatePet('dog'));
         document.getElementById('generate-cat-btn').addEventListener('click', () => generatePet('cat'));
 
