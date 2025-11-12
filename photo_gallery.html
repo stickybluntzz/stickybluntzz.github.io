@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STICKYBLUNTZZ Photo Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpg" href="https://placehold.co/16x16/DC2626/ffffff?text=P"> 
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #E5E7EB;
+            background: linear-gradient(to bottom right, #000000, #3C0000, #000000); 
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .pixel-card {
+            border: 4px solid #DC2626;
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+        
+        .accent-text {
+            color: #EF4444;
+        }
+
+        .link-button-red {
+            background-color: #DC2626;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .link-button-red:hover {
+            background-color: #991B1B;
+            transform: translateY(-2px);
+        }
+
+      
+        .gallery-image-container {
+            overflow: hidden;
+            border-radius: 0.75rem; 
+            border: 2px solid #DC2626;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            background-color: #111827;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-image-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+        }
+
+   
+        .gallery-image-wrapper {
+            padding-top: 56.25%; 
+            position: relative;
+            border-bottom: 2px solid #DC2626;
+        }
+
+        .gallery-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-image-container:hover .gallery-image {
+            transform: scale(1.05);
+        }
+
+
+        .card-title {
+            color: #EF4444; 
+            padding: 0.75rem 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1; 
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+
+        .search-input-gallery {
+            background-color: #111827; 
+            border-color: #DC2626; 
+            color: #E5E7EB;
+            transition: border-color 0.3s ease;
+            border-radius: 0.75rem;
+        }
+        .search-input-gallery:focus {
+            outline: none;
+            border-color: #EF4444;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="p-4 md:p-8 w-full max-w-7xl">
+        
+        <div class="pixel-card rounded-2xl p-6 md:p-10">
+            
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-dashed border-gray-600/50">
+                <h1 class="text-4xl md:text-5xl font-extrabold accent-text mb-4 sm:mb-0">
+                    <span class="text-3xl mr-2">🐾</span> The Gallery
+                </h1>
+                <a href="index.html" class="link-button-red hover:shadow-lg">
+                    <span class="mr-2">🏠</span> Back to Home
+                </a>
+            </div>
+            
+
+            <div class="mb-8">
+                <input type="text" id="gallery-search-input" placeholder="Search photos by title or description..." 
+                       class="w-full p-3 border-2 focus:ring-2 search-input-gallery">
+            </div>
+
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
+
+                <div class="gallery-image-container">
+                    <div class="gallery-image-wrapper">
+                        <img src="Smileyahhnova.png" alt="Happy ahh nova" 
+                             class="gallery-image">
+                    </div>
+                    <div class="card-title">Happy ahh nova</div>
+                </div>
+
+
+                <div class="gallery-image-container">
+                    <div class="gallery-image-wrapper">
+                        <img src="goobanose.png" alt="Meowfart" 
+                             class="gallery-image">
+                    </div>
+                    <div class="card-title">Meowfart</div>
+                </div>
+
+
+                <div class="gallery-image-container">
+                    <div class="gallery-image-wrapper">
+                        <img src="collectionofcollis.png" alt="Collis Collection" 
+                             class="gallery-image">
+                    </div>
+                    <div class="card-title">Collis Collection</div>
+                </div>
+
+     
+                <div class="gallery-image-container">
+                    <div class="gallery-image-wrapper">
+                        <img src="scoutsilly.png" alt="Scout Silly" 
+                             class="gallery-image">
+                    </div>
+                    <div class="card-title">Scout Silly</div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('gallery-search-input');
+            const galleryItems = document.querySelectorAll('.gallery-image-container');
+
+            function filterGallery() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+
+                galleryItems.forEach(item => {
+                    const imgAlt = item.querySelector('img')?.getAttribute('alt').toLowerCase() || '';
+                    const titleText = item.querySelector('.card-title')?.textContent.toLowerCase() || '';
+
+                    if (imgAlt.includes(searchTerm) || titleText.includes(searchTerm)) {
+                        item.style.display = 'flex'; 
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+
+            searchInput.addEventListener('input', filterGallery);
+        });
+    </script>
+</body>
+</html>
