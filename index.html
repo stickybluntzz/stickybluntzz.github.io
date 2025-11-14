@@ -9,7 +9,7 @@
     <link rel="icon" type="image/jpg" href="PFP.jpg"> 
     <meta property="og:title" content="STICKYBLUNTZZ ">
     <meta property="og:description" content="A person browsing the internet. Check out my fursonas, music interests, and links!">
-    <meta property="og:image" content="https://stickybluntzz.github.io/PFP.jpg">
+    <meta property="og:image" content="https://stickybluntzz.github.io/embed.png">
     <meta property="og:image:type" content="image/jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -17,10 +17,10 @@
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#DC2626"> 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image:src" content="https://stickybluntzz.github.io/PFP.jpg">
+    <meta name="twitter:image:src" content="https://stickybluntzz.github.io/embed.png">
     <meta name="twitter:site" content="@stickybluntzz">
     <meta name="twitter:creator" content="@stickybluntzz">
-    <meta name="twitter:image" content="https//stickybluntzz.github.io/PFP.jpg"> 
+    <meta name="twitter:image" content="https//stickybluntzz.github.io/embed.png"> 
     
     <style>
         body {
@@ -86,7 +86,6 @@
         }
         
         .image-wrapper {
-            /* Aspect Ratio box for responsiveness */
             position: relative;
             padding-top: 100%; 
             overflow: hidden;
@@ -100,7 +99,24 @@
             height: 100%;
             object-fit: cover;
         }
+                .fursonas .image-wrapper {
+            padding-top: 65%; 
+        }
+
+        .fursona-card {
+            padding: 0.75rem; 
+        }
+
+        .fursona-card h4 {
+            font-size: 1.125rem; 
+        }
+
+        .fursona-card p {
+            font-size: 0.875rem; 
+            margin-bottom: 0.25rem;
+        }
     </style>
+
 </head>
 <body>
     <audio id="background-audio" loop src="Bg.mp3"></audio>
@@ -154,28 +170,38 @@
                     <span class="text-xl">💌</span> Gallery
                 </a>
             </div>
-            
-            <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
+
+
+             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
 
             <h3 class="text-3xl font-extrabold accent-text text-center mb-6">My Fursonas</h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 fursonas">
                 <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
                     <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
                         <img src="Collis.png" alt="Collis Banner" class="absolute inset-0 w-full h-full object-cover">
                     </div>
                     <h4 class="text-2xl font-bold text-red-400">Collis [Dog]</h4>
-                    <p class="text-sm text-gray-400">A red dog based off of my favorite colors <br> Also based off of Clifford The Big Red Dog.</p>
+                    <p class="text-sm text-gray-400">A red dog based off of my favorite colors <br> Also based off of Clifford The Big Red Dog. <br> Art made by <strong class="text-red-300">Crowlysqueaker</strong></p>
                 </div>
 
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-3 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500 fursona-card">
                     <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
                         <img src="Scout.png" alt="Scout Banner" class="absolute inset-0 w-full h-full object-cover">
                     </div>
                     <h4 class="text-2xl font-bold text-red-400">Scout [Karelian Bear Dog]</h4>
-                    <p class="text-sm text-gray-400">A fursona I made based off of a Karelian Bear Dog. <br> This fursona has rose designs around its body with a blue outline.</p>
+                    <p class="text-sm text-gray-400">A fursona I made based off of a Karelian Bear Dog. <br> This fursona has rose designs around its body with a blue outline. <br> The base is <strong class="text-red-300">Juno by Cilcipher</strong></p>
+                </div>
+
+                <div class="bg-gray-900 border border-red-700 rounded-xl p-3 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500 fursona-card">
+                    <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
+                        <img src="Flint.png" alt="Flint Banner" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-2xl font-bold text-red-400">Flint [Bunny]</h4>
+                    <p class="text-sm text-gray-400">A cool bunny fursona. <br> I made this fursona dark with red, grey, and black coloring. <br> The base is <strong class="text-red-300">Biscotti by BratBun</strong></p>
                 </div>
             </div>
+
 
             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
 
