@@ -26,7 +26,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: #E5E7EB;
-            background: linear-gradient(to bottom right, #000000, #3C0000, #000000); 
+            background: linear-gradient(to bottom right, #000000, #3a3a3a, #000000);
             min-height: 100vh;
             display: flex;
             align-items: flex-start;
@@ -35,18 +35,19 @@
         }
 
         .pixel-card {
-            border: 4px solid #DC2626;
-            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.3);
+            border: 4px solid #c4c4c4;
+            box-shadow: 0 10px 40px rgba(173, 173, 173, 0.3);
             backdrop-filter: blur(5px);
             background-color: rgba(0, 0, 0, 0.95);
         }
         
         .accent-text {
-            color: #EF4444;
+            color: #dadada;
         }
 
+
         .link-button-red {
-            background-color: #DC2626;
+            background-color: #5b5b5b;
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
@@ -57,7 +58,7 @@
             justify-content: center;
         }
         .link-button-red:hover {
-            background-color: #991B1B;
+            background-color: #3d3d3d;
             transform: translateY(-2px);
         }
 
@@ -65,8 +66,8 @@
         .gallery-image-container {
             overflow: hidden;
             border-radius: 0.75rem; 
-            border: 2px solid #DC2626;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            border: 2px solid #c4c4c4;
+            box-shadow: 0 4px 15px rgba(173, 173, 173, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             background-color: #111827;
@@ -76,15 +77,52 @@
 
         .gallery-image-container:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(173, 173, 173, 0.35);
         }
 
    
         .gallery-image-wrapper {
             padding-top: 56.25%; 
             position: relative;
-            border-bottom: 2px solid #DC2626;
+            border-bottom: 2px solid #c4c4c4;
         }
+
+
+        .image-wrapper {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+     
+        .fursonas .image-wrapper {
+            padding-top: 80%;
+        }
+
+        .fursona-card {
+            padding: 0.5rem; 
+        }
+
+        .fursona-card h4 {
+            font-size: 1rem; 
+        }
+
+        .fursona-card p {
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+
 
         .gallery-image {
             position: absolute;
@@ -102,7 +140,7 @@
 
 
         .card-title {
-            color: #EF4444; 
+            color: #dadada; 
             padding: 0.75rem 1rem;
             font-size: 1.2rem;
             font-weight: bold;
@@ -114,14 +152,14 @@
 
         .search-input-gallery {
             background-color: #111827; 
-            border-color: #DC2626; 
+            border-color: #8f8f8f; 
             color: #E5E7EB;
             transition: border-color 0.3s ease;
             border-radius: 0.75rem;
         }
         .search-input-gallery:focus {
             outline: none;
-            border-color: #EF4444;
+            border-color: #545454;
             box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
         }
     </style>
@@ -133,9 +171,7 @@
             
 
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-dashed border-gray-600/50">
-                <h1 class="text-4xl md:text-5xl font-extrabold accent-text mb-4 sm:mb-0">
-                    <span class="text-3xl mr-2">🐾</span> The Gallery
-                </h1>
+                <h1 class="text-4xl md:text-5xl font-extrabold accent-text mb-4 sm:mb-0">Gallery & Extra</h1>
                 <a href="index.html" class="link-button-red hover:shadow-lg">
                     <span class="mr-2">🏠</span> Back to Home
                 </a>
@@ -144,99 +180,133 @@
 
             <div class="mb-8">
                 <input type="text" id="gallery-search-input" placeholder="Search photos by title or description..." 
-                       class="w-full p-3 border-2 focus:ring-2 search-input-gallery">
+                        class="w-full p-3 border-2 focus:ring-2 search-input-gallery">
             </div>
+
+
+            <hr class="my-6 border-t-2 border-dashed border-gray-600/50">
+            <h3 class="text-3xl font-extrabold accent-text text-center mb-6">My Fursonas</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fursonas mb-8">
+                <div class="bg-gray-900 border border-gray-100 rounded-xl p-3 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-gray-500 fursona-card">
+                    <div class="image-wrapper w-full relative mb-2 mx-auto rounded-lg overflow-hidden border-2 border-gray-500">
+                        <img src="Files/Gallery/Collis.png" alt="Collis Banner" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-200">Collis [Dog]</h4>
+                    <p class="text-xs text-gray-400">A red dog based off of my favorite colors <br> Also based off of Clifford The Big Red Dog. <br> Art made by <strong class="text-pink-300">Crowlysqueaker</strong></p>
+                </div>
+
+                <div class="bg-gray-900 border border-gray-100 rounded-xl p-3 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-gray-500 fursona-card">
+                    <div class="image-wrapper w-full relative mb-2 mx-auto rounded-lg overflow-hidden border-2 border-gray-500">
+                        <img src="Files/Gallery/Scout.png" alt="Scout Banner" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-200">Scout [Karelian Bear Dog]</h4>
+                    <p class="text-xs text-gray-400">A fursona I made based off of a Karelian Bear Dog. <br> This fursona has rose designs around its body with a blue outline. <br> The base is <strong class="text-pink-300">Juno by Cilcipher</strong></p>
+                </div>
+
+                <div class="bg-gray-900 border border-gray-100 rounded-xl p-3 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-gray-500 fursona-card">
+                    <div class="image-wrapper w-full relative mb-2 mx-auto rounded-lg overflow-hidden border-2 border-gray-500">
+                        <img src="Files/Gallery/Flint.png" alt="Flint Banner" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-200">Flint [Cabbit]</h4>
+                    <p class="text-xs text-gray-400">A cool Cat Rabbit fursona. <br> I made this fursona dark with red, grey, and black coloring. <br> The base is <strong class="text-pink-300">Biscotti by BratBun</strong></p>
+                </div>
+            </div>
+
+            <hr class="my-6 border-t-2 border-dashed border-gray-600/50">
+            <h3 class="text-3xl font-extrabold accent-text text-center mb-6">Gallery</h3>
 
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
 
+                
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="Smileyahhnova.png" alt="Happy ahh nova" class="gallery-image">
+                        <img src="Files/Gallery/Smileyahhnova.png" alt="Happy ahh nova" class="gallery-image">
                     </div>
                     <div class="card-title">Happy ahh nova</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="goobanose.png" alt="Meowfart" class="gallery-image">
+                        <img src="Files/Gallery/goobanose.png" alt="Meowfart" class="gallery-image">
                     </div>
                     <div class="card-title">Meowfart</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="collectionofcollis.png" alt="Collis Collection" class="gallery-image">
+                        <img src="Files/Gallery/Collis.png" alt="Collis Collection" class="gallery-image">
                     </div>
                     <div class="card-title">Collis Collection</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="scoutsilly.png" alt="Scout Silly" class="gallery-image">
+                        <img src="Files/Gallery/Scout.png" alt="Scout Silly" class="gallery-image">
                     </div>
                     <div class="card-title">Scout Silly</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="sexter.png" alt="Sexter" class="gallery-image">
+                        <img src="Files/Gallery/sexter.png" alt="Sexter" class="gallery-image">
                     </div>
                     <div class="card-title">Sexter Morgan</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="goonmine.png" alt="Goonmine" class="gallery-image">
+                        <img src="Files/Gallery/goonmine.png" alt="Goonmine" class="gallery-image">
                     </div>
                     <div class="card-title">I am goonmine..</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="dimwoah.png" alt="Dimwoah" class="gallery-image">
+                        <img src="Files/Gallery/dimwoah.png" alt="Dimwoah" class="gallery-image">
                     </div>
                     <div class="card-title">Dimcracker Woah</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="dimcrackerswag.png" alt="Dim Swag" class="gallery-image">
+                        <img src="Files/Gallery/dimcrackerswag.png" alt="Dim Swag" class="gallery-image">
                     </div>
                     <div class="card-title">Dimcracker Swag</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="cabbit.jpg" alt="Cabbit" class="gallery-image">
+                        <img src="Files/Gallery/cabbit.jpg" alt="Cabbit" class="gallery-image">
                     </div>
                     <div class="card-title">Cabbit</div>
                 </div>
 
                                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="cabbit2.jpg" alt="Cabbit 2" class="gallery-image">
+                        <img src="Files/Gallery/cabbit2.jpg" alt="Cabbit 2" class="gallery-image">
                     </div>
                     <div class="card-title">Cabbit 2</div>
                 </div>
 
                                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="dogecabbit.png" alt="Dogecabbit" class="gallery-image">
+                        <img src="Files/Gallery/dogecabbit.png" alt="Dogecabbit" class="gallery-image">
                     </div>
                     <div class="card-title">Doge Cabbit</div>
                 </div>
 
                                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="meowl.jpg" alt="Meowl" class="gallery-image">
+                        <img src="Files/Gallery/meowl.jpg" alt="Meowl" class="gallery-image">
                     </div>
                     <div class="card-title">Meowl</div>
                 </div>
 
                                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="meowlrage.jpg" alt="Meowl Ragebait" class="gallery-image">
+                        <img src="Files/Gallery/meowlrage.jpg" alt="Meowl Ragebait" class="gallery-image">
                     </div>
                     <div class="card-title">Meowl Ragebait</div>
                 </div>
@@ -244,28 +314,28 @@
                 
                                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="nerdnova.png" alt="Nerd Nova" class="gallery-image">
+                        <img src="Files/Gallery/nerdnova.png" alt="Nerd Nova" class="gallery-image">
                     </div>
                     <div class="card-title">Nerd Nova</div>
-                </div>   
+                </div> 
                 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="plsspeed.png" alt="Please speed" class="gallery-image">
+                        <img src="Files/Gallery/plsspeed.png" alt="Please speed" class="gallery-image">
                     </div>
                     <div class="card-title">My moms kinda homeless</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="Scarycrowly.png" alt="Crowly Scary" class="gallery-image">
+                        <img src="Files/Gallery/Scarycrowly.png" alt="Crowly Scary" class="gallery-image">
                     </div>
                     <div class="card-title">Scary Crowly</div>
                 </div>
 
                 <div class="gallery-image-container">
                     <div class="gallery-image-wrapper">
-                        <img src="proposal.png" alt="Adorbs" class="gallery-image">
+                        <img src="Files/Gallery/proposal.png" alt="Adorbs" class="gallery-image">
                     </div>
                     <div class="card-title">He's Proposing</div>
                 </div>

@@ -26,224 +26,188 @@
         body {
             font-family: 'Inter', sans-serif;
             color: #E5E7EB;
-            background: linear-gradient(to bottom right, #000000, #3C0000, #000000); 
+            background: linear-gradient(to bottom right, #000000, #3a3a3a, #000000); 
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
+            overflow: hidden; 
         }
 
         .pixel-card {
-            border: 4px solid #DC2626;
-            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.3);
+            border: 4px solid #c4c4c4;
+            box-shadow: 0 10px 40px rgba(173, 173, 173, 0.3);
             backdrop-filter: blur(5px);
             background-color: rgba(0, 0, 0, 0.95);
+            position: relative; 
         }
         
         .accent-text {
-            color: #EF4444;
+            color: #dadada;
         }
 
         .link-button {
-            background-color: #DC2626;
+            background-color: #5b5b5b;
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
             font-weight: 700;
-            @apply hover:bg-red-700 active:bg-red-800;
         }
         .link-button:hover {
-            background-color: #991B1B;
+            background-color: #3d3d3d;
             transform: translateY(-2px);
         }
 
-        #audio-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 9999px;
-            background-color: #DC2626;
-            color: white;
-            transition: background-color 0.2s;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            margin-left: 1rem;
-        }
-        #audio-toggle:hover {
-            background-color: #991B1B;
+        .music-medium {
+            background: #111217;
+            border: 1px solid rgba(196,196,196,0.06);
+            padding: 1rem; 
         }
 
-        @keyframes subtle-pulse {
-            0%, 100% { transform: scale(1) translateY(0); opacity: 1; }
-            50% { transform: scale(1.1) translateY(-2px); opacity: 0.9; }
-        }
-        .click-me-pulse {
-            animation: subtle-pulse 1.5s ease-in-out infinite;
-        }
-        
-        .image-wrapper {
-            position: relative;
-            padding-top: 100%; 
-            overflow: hidden;
+        .music-medium .link-button {
+            background: #2b2b2b;
+            color: #e6e6e6;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
         }
 
-        .image-wrapper img {
-            position: absolute;
+        .music-medium .link-button:hover { background: #3a3a3a; }
+
+        #music-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-        }
-                .fursonas .image-wrapper {
-            padding-top: 65%; 
-        }
-
-        .fursona-card {
-            padding: 0.75rem; 
-        }
-
-        .fursona-card h4 {
-            font-size: 1.125rem; 
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            transition: opacity 0.5s ease;
         }
 
-        .fursona-card p {
-            font-size: 0.875rem; 
-            margin-bottom: 0.25rem;
+        #music-overlay button {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 1.25rem;
         }
     </style>
 
 </head>
 <body>
-    <audio id="background-audio" src="Bg.mp3"></audio>
+    <audio id="background-audio" preload="none"></audio>
 
-    <div class="p-4 md:p-8 w-full max-w-4xl">
+    <div id="music-overlay">
+        <h1 class="text-4xl font-extrabold mb-4">STICKYBLUNTZZ!</h1>
+        <p class="text-xl mb-6">A person browsing the internet. <br> Click Below </p>
+        <button id="start-music-btn" class="link-button transform-none hover:translate-y-0">
+            ▶ ENTER SITE
+        </button>
+    </div>
+    <div id="main-content" class="p-4 md:p-8 w-full max-w-4xl opacity-0 transition-opacity duration-500">
         
         <div class="pixel-card rounded-2xl p-6 md:p-10 transition duration-300 hover:scale-[1.02]">
             
             <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
                 
                 <div class="flex-shrink-0 relative">
-                    <div class="w-36 h-36 rounded-full border-4 border-red-600 flex items-center justify-center shadow-2xl transition duration-500 hover:scale-110 bg-gray-900 overflow-hidden relative">
+                    <div class="w-36 h-36 rounded-full border-4 border-gray-600 flex items-center justify-center shadow-2xl transition duration-500 hover:scale-110 bg-gray-900 overflow-hidden relative">
                         <img src="PFP.jpg" alt="Profile Picture" class="absolute inset-0 w-full h-full object-cover rounded-full z-0">
                     </div>
-                    <span class="absolute -top-4 -right-4 text-5xl accent-text transform rotate-[10deg] animate-pulse" title="Bone">🦴</span>
+                    <span class="absolute -top-4 -right-4 text-5xl accent-text transform rotate-[10deg] animate-pulse" title="Rose">🌹</span>
                 </div>
 
                 <div class="flex-grow text-center md:text-left">
                     <div class="flex items-center justify-center md:justify-start">
                         <h2 class="text-4xl font-extrabold accent-text mb-2">Hello! I am Stickybluntzz!</h2>
-                        <button id="audio-toggle" title="Play/Pause Background Music" class="mt-[-0.5rem] click-me-pulse">
-                            <span id="audio-icon" class="text-xl">🔇</span>
-                        </button>
                     </div>
-                    <p class="text-gray-200 text-lg">A person browsing the internet. <br> This website was made for people to get to know me and communicate to me!</p>
-                    <p class="text-sm text-gray-400 mt-1 italic">My Discord is <strong class="text-red-300">STICKYBLUNTZZ</strong>.</p>
+
+                    <p class="text-gray-200 text-lg">This website was made for people to get to know me and communicate to me!</p>
+                    <p class="text-sm text-gray-400 mt-1 italic">My Discord is <strong class="text-pink-300">STICKYBLUNTZZ</strong>.</p>
                 </div>
             </div>
             
+            <div class="music-medium bg-gray-900 border border-gray-700 rounded-xl shadow-md my-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div id="current-track-title" class="text-gray-200 font-semibold"></div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button id="prev-track" class="link-button" aria-label="Previous">⏮</button>
+                        <button id="play-pause" class="link-button" aria-label="Play or Pause">▶</button>
+                        <button id="next-track" class="link-button" aria-label="Next">⏭</button>
+                    </div>
+                </div>
+            </div>
             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                
                 <a href="https://x.com/stickybluntzz" target="_blank" class="link-button hover:shadow-lg">
                     <span class="text-xl">🐦</span> X/Twitter Profile
                 </a>
 
-                
                 <a href="https://discord.com/users/1367956995893755914" target="_blank" class="link-button hover:shadow-lg">
                     <span class="text-xl">🔗</span> Discord (Might not work)
                 </a>
 
-                
                 <a href="https://t.me/sillydogmoment" target="_blank" class="link-button hover:shadow-lg">
                     <span class="text-xl">📱</span> Telegram
                 </a>
                     
-                
                 <a href="photo_gallery.html" class="link-button hover:shadow-lg">
                     <span class="text-xl">💌</span> Gallery
                 </a>
             </div>
-
-
-             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
-
-            <h3 class="text-3xl font-extrabold accent-text text-center mb-6">My Fursonas</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 fursonas">
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500">
-                    <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
-                        <img src="Collis.png" alt="Collis Banner" class="absolute inset-0 w-full h-full object-cover">
-                    </div>
-                    <h4 class="text-2xl font-bold text-red-400">Collis [Dog]</h4>
-                    <p class="text-sm text-gray-400">A red dog based off of my favorite colors <br> Also based off of Clifford The Big Red Dog. <br> Art made by <strong class="text-red-300">Crowlysqueaker</strong></p>
-                </div>
-
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-3 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500 fursona-card">
-                    <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
-                        <img src="Scout.png" alt="Scout Banner" class="absolute inset-0 w-full h-full object-cover">
-                    </div>
-                    <h4 class="text-2xl font-bold text-red-400">Scout [Karelian Bear Dog]</h4>
-                    <p class="text-sm text-gray-400">A fursona I made based off of a Karelian Bear Dog. <br> This fursona has rose designs around its body with a blue outline. <br> The base is <strong class="text-red-300">Juno by Cilcipher</strong></p>
-                </div>
-
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-3 text-center shadow-lg transition duration-200 hover:bg-gray-800 hover:border-red-500 fursona-card">
-                    <div class="image-wrapper w-full relative mb-3 mx-auto rounded-lg overflow-hidden border-2 border-red-500">
-                        <img src="Flint.png" alt="Flint Banner" class="absolute inset-0 w-full h-full object-cover">
-                    </div>
-                    <h4 class="text-2xl font-bold text-red-400">Flint [Cabbit]</h4>
-                    <p class="text-sm text-gray-400">A cool Cat Rabbit fursona. <br> I made this fursona dark with red, grey, and black coloring. <br> The base is <strong class="text-red-300">Biscotti by BratBun</strong></p>
-                </div>
-            </div>
-
 
             <hr class="my-8 border-t-2 border-dashed border-gray-600/50">
 
             <h3 class="text-3xl font-extrabold accent-text text-center mb-6">Get To Know Me</h3>
 
             <div class="space-y-4">
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-gray-500">
                     <span class="text-3xl flex-shrink-0">🎧</span>
                     <div>
-                        <h4 class="text-xl font-bold text-red-400">Music Obsession</h4>
+                        <h4 class="text-xl font-bold text-gray-400">Music Obsession</h4>
                         <p class="text-gray-300">I love artists like Nirvana, Kevin Gates, KoRn, Tyler, The Creator, and Slipknot. <br> Other artists I enjoy are J. Cole, Deftones, Snuffles, Lil Darkie, Kendrick Lamar, and Kid Cudi</p>
                     </div>
                 </div>
-                
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+
+                <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-gray-500">
                     <span class="text-3xl flex-shrink-0">💻</span>
                     <div>
-                        <h4 class="text-xl font-bold text-red-400">Computer Lover</h4>
+                        <h4 class="text-xl font-bold text-gray-400">Computer Lover</h4>
                         <p class="text-gray-300">I love to tinker with computer parts and whatnot. I don't know everything about computers but I like learning and chatting about computer stuff.</p>
                     </div>
                 </div>
 
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-gray-500">
                     <span class="text-3xl flex-shrink-0">🎮</span>
                     <div>
-                        <h4 class="text-xl font-bold text-red-400">Gaming</h4>
+                        <h4 class="text-xl font-bold text-gray-400">Gaming</h4>
                         <p class="text-gray-300">I like games like BeamNG, VRChat, CSGO, and Skate</p>
                     </div>
                 </div>
-                
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+
+                <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-gray-500">
                     <span class="text-3xl flex-shrink-0">❤️</span>
                     <div>
-                        <h4 class="text-xl font-bold text-red-400">Things I Like</h4>
+                        <h4 class="text-xl font-bold text-gray-400">Things I Like</h4>
                         <p class="text-gray-300">I like basketball, driving, sleeping, exploring foods, and other things!</p>
                     </div>
                 </div>
 
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-red-500">
+                <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 shadow-lg flex items-center space-x-4 transition duration-200 hover:bg-gray-800 hover:border-gray-500">
                     <span class="text-3xl flex-shrink-0">🐶</span>
                     <div>
-                        <h4 class="text-xl font-bold text-red-400">Do I have any fursuits?</h4>
+                        <h4 class="text-xl font-bold text-gray-400">Do I have any fursuits?</h4>
                         <p class="text-gray-300">Not yet! I still have my life to figure out before I get FULLY into furry stuff.</p>
                     </div>
                 </div>
@@ -255,21 +219,20 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-    
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
-                    <h4 class="text-2xl font-bold text-red-400 mb-3">Fetch a Dog</h4>
-                    <div id="dog-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
+                <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
+                    <h4 class="text-2xl font-bold text-gray-400 mb-3">Fetch a Dog</h4>
+                    <div id="dog-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-gray-500">
                         <p class="text-gray-500">Click below!</p>
                     </div>
                     <button id="generate-dog-btn" class="link-button w-full">
                         New Random Dog
                     </button>
-                    <p id="dog-error-msg" class="text-sm text-red-500 mt-2 hidden">Failed to fetch dog. Try again!</p>
+                    <p id="dog-error-msg" class="text-sm text-gray-500 mt-2 hidden">Failed to fetch dog. Try again!</p>
                 </div>
 
-                <div class="bg-gray-900 border border-red-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
-                    <h4 class="text-2xl font-bold text-red-400 mb-3">Summon a Cat</h4>
-                    <div id="cat-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-red-500">
+                <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 text-center shadow-lg flex flex-col items-center">
+                    <h4 class="text-2xl font-bold text-gray-400 mb-3">Summon a Cat</h4>
+                    <div id="cat-image-container" class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden border-2 border-gray-500">
                         <p class="text-gray-500">Click below!</p>
                     </div>
                     <button id="generate-cat-btn" class="link-button w-full">
@@ -285,50 +248,116 @@
     </div>
 
     <script>
-
         const audio = document.getElementById('background-audio');
-        const toggleButton = document.getElementById('audio-toggle');
-        const icon = document.getElementById('audio-icon');
+        audio.volume = 0.2;
 
-        audio.volume = 0.2; 
+        const playlist = [
+            { src: 'offtop.mp3', title: 'Off Top - Earl Sweatshirt' },
+            { src: 'toiletmilk.mp3', title: 'Toilet Milk - Tyler, The Creator' },
+            { src: 'skut.mp3', title: 'Skut - Tyler, The Creator' },
+            { src: 'servetheservants.mp3', title: 'Serve the Servants - Nirvana' },
+            { src: 'loungeact.mp3', title: 'Lounge Act - Nirvana' },
+            { src: 'drainyou.mp3', title: 'Drain You - Nirvana' }
+        ];
+        let currentIndex = 0;
         let isPlaying = false;
+        let isLoaded = false; 
 
-        function updateIcon() {
-            icon.textContent = isPlaying ? '🔊' : '🔇';
+        const titleEl = document.getElementById('current-track-title');
+        const playPauseBtn = document.getElementById('play-pause');
+        const overlay = document.getElementById('music-overlay');
+        const startBtn = document.getElementById('start-music-btn');
+        const mainContent = document.getElementById('main-content');
+        
+        function loadTrack(index, autoplay = false) {
+            const item = playlist[index];
+            if (!item) return;
+            
+            currentIndex = index;
+            audio.src = item.src;
+            isLoaded = true;
+
+            if (titleEl) titleEl.textContent = `Playing: ${item.title}`;
+
+            if (autoplay) {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    updatePlayButton();
+                }).catch(err => {
+                    isPlaying = false;
+                    updatePlayButton();
+                    console.warn('Playback failed:', err);
+                });
+            } else {
+                isPlaying = false;
+                updatePlayButton();
+            }
         }
 
-        function toggleAudio() {
-            toggleButton.classList.remove('click-me-pulse');
+        function startMusicAndEnterSite() {
+            const randomIndex = Math.floor(Math.random() * playlist.length);
             
+            loadTrack(randomIndex, true); 
+
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                mainContent.style.opacity = '1';
+                document.body.style.overflow = 'auto'; 
+            }, 500); 
+
+            startBtn.removeEventListener('click', startMusicAndEnterSite);
+        }
+
+        function playPauseToggle() {
+            if (!isLoaded) {
+                loadTrack(currentIndex, true);
+                return;
+            }
+
             if (isPlaying) {
                 audio.pause();
                 isPlaying = false;
             } else {
-                audio.play().then(() => {
-                    isPlaying = true;
-                }).catch(error => {
-                    console.error("Audio playback failed:", error);
+                audio.play().catch(err => {
+                    console.warn('Play failed:', err);
                 });
+                isPlaying = true;
             }
-            updateIcon();
+            updatePlayButton();
         }
 
-        updateIcon();
+        function updatePlayButton() {
+            if (!playPauseBtn) return;
+            playPauseBtn.textContent = isPlaying ? '⏸' : '▶';
+        }
 
-        toggleButton.addEventListener('click', toggleAudio);
+        function nextTrack() {
+            const nextIndex = (currentIndex + 1) % playlist.length;
+            loadTrack(nextIndex, true); 
+        }
+
+        function prevTrack() {
+            const prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+            loadTrack(prevIndex, true); 
+        }
+
+        startBtn.addEventListener('click', startMusicAndEnterSite);
+        document.getElementById('next-track').addEventListener('click', nextTrack);
+        document.getElementById('prev-track').addEventListener('click', prevTrack);
+        playPauseBtn.addEventListener('click', playPauseToggle);
+
+        audio.addEventListener('play', () => { isPlaying = true; updatePlayButton(); });
+        audio.addEventListener('pause', () => { isPlaying = false; updatePlayButton(); });
+        audio.addEventListener('ended', () => { nextTrack(); }); 
 
         document.addEventListener('DOMContentLoaded', () => {
-            audio.play().then(() => {
-                isPlaying = true;
-                updateIcon();
-                toggleButton.classList.remove('click-me-pulse');
-            }).catch(error => {
-                console.warn("Autoplay was blocked. Please click the speaker icon to start music.");
-                isPlaying = false;
-                updateIcon();
-            });
+            const initialIndex = Math.floor(Math.random() * playlist.length);
+            currentIndex = initialIndex;
+            if (titleEl) titleEl.textContent = `Ready to Play: ${playlist[initialIndex].title}`;
+            
+            mainContent.style.opacity = '0';
         });
-
 
 
         async function fetchWithRetry(url, options = {}, retries = 3) {
@@ -345,7 +374,6 @@
             }
         }
 
-
         async function generatePet(type) {
             const container = document.getElementById(`${type}-image-container`);
             const button = document.getElementById(`generate-${type}-btn`);
@@ -354,7 +382,7 @@
             errorMsg.classList.add('hidden');
             button.disabled = true;
             button.textContent = `Fetching ${type}...`;
-            container.innerHTML = `<span class="text-red-500 animate-pulse">Loading...</span>`;
+            container.innerHTML = `<span class="text-gray-500 animate-pulse">Loading...</span>`;
             
             let apiUrl = '';
             if (type === 'dog') {
